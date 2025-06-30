@@ -1,0 +1,14 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "CloudinarySettings": {
+    "CloudName": "dagzhrznh",
+    "ApiKey": "926341889414148",
+    "ApiSecret": "HuLWAE132pXs88kwgnQ6a3-3CGw"
+  },
+  "AllowedHosts": "*"
+}
