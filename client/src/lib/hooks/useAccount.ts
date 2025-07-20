@@ -28,33 +28,38 @@ export const useAccount = () => {
             toast.success('Register successful - you can now login');
             navigate('/login');
         }
-    })
+    });
 
     const logoutUser = useMutation({
         mutationFn: async () => {
             await agent.post('/account/logout');
         },
         onSuccess: () => {
-            queryClient.removeQueries({queryKey: ['user']});
-            queryClient.removeQueries({queryKey: ['activities']});
+            queryClient.removeQueries({ queryKey: ['user'] });
+            queryClient.removeQueries({ queryKey: ['activities'] });
             navigate('/');
         }
-    })
+    });
 
-    const {data: currentUser, isLoading: loadingUserInfo} = useQuery({
+    const {
+        data: currentUser,
+        isLoading: loadingUserInfo,
+        refetch: fetchCurrentUser
+    } = useQuery({
         queryKey: ['user'],
         queryFn: async () => {
             const response = await agent.get<User>('/account/user-info');
             return response.data;
         },
-        enabled: !queryClient.getQueryData(['user']) 
-    })
+        enabled: false 
+    });
 
     return {
         loginUser,
         currentUser,
         logoutUser,
         loadingUserInfo,
+        fetchCurrentUser, 
         registerUser
     }
 }
