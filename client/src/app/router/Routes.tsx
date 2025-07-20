@@ -19,12 +19,12 @@ export const router = createBrowserRouter([
         element: <App />,
         children: [
             {element: <RequireAuth />, children: [
-                { path: 'activities', element: <ActivityDashboard /> },
                 { path: 'activities/:id', element: <ActivityDetailPage /> },
                 { path: 'createActivity', element: <ActivityForm key='create' /> },
                 { path: 'manage/:id', element: <ActivityForm /> },
                 { path: 'profiles/:id', element: <ProfilePage /> },
             ]},
+            { path: 'activities', element: <ActivityDashboard /> },
             { path: '', element: <HomePage /> },
             { path: 'counter', element: <Counter /> },
             { path: 'errors', element: <TestErrors /> },
