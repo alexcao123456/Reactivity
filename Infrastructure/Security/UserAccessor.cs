@@ -17,10 +17,10 @@ public class UserAccessor(IHttpContextAccessor httpContextAccessor, AppDbContext
             ?? throw new UnauthorizedAccessException("No user is logged in");
     }
 
-    public string GetUserId()
+    public string? GetUserId()
     {
-        return httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier)
-            ?? throw new Exception("No user found");
+        return httpContextAccessor.HttpContext?
+            .User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 
     public async Task<User> GetUserWithPhotosAsync()
