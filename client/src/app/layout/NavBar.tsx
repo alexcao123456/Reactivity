@@ -1,6 +1,6 @@
 import { Group } from "@mui/icons-material";
 import { Box, AppBar, Toolbar, Typography, Container, MenuItem, CircularProgress } from "@mui/material";
-import { NavLink } from "react-router";
+import { NavLink, useLocation } from "react-router";
 import MenuItemLink from "../shared/components/MenuItemLink";
 import { useStore } from "../../lib/hooks/useStore";
 import { Observer } from "mobx-react-lite";
@@ -9,7 +9,9 @@ import UserMenu from "./UserMenu";
 
 export default function NavBar() {
     const { uiStore } = useStore();
-    const { currentUser } = useAccount();
+    const { currentUser } = useAccount();  
+    const location = useLocation();
+    const showAuth = location.pathname !== '/';
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -22,7 +24,7 @@ export default function NavBar() {
                         <Box>
                             <MenuItem component={NavLink} to='/' sx={{ display: 'flex', gap: 2 }}>
                                 <Group fontSize="large" />
-                                <Typography sx={{position: 'relative'}} variant="h4" fontWeight='bold'>
+                                <Typography sx={{ position: 'relative' }} variant="h4" fontWeight='bold'>
                                     Reactivities
                                 </Typography>
                                 <Observer>
@@ -41,30 +43,30 @@ export default function NavBar() {
                                 </Observer>
                             </MenuItem>
                         </Box>
-                        <Box sx={{ display: 'flex' }}>
-                            <MenuItemLink to='/activities'>
-                                Activities
-                            </MenuItemLink>
-                            <MenuItemLink to='/counter'>
-                                Counter
-                            </MenuItemLink>
-                            <MenuItemLink to='/errors'>
-                                Errors
-                            </MenuItemLink>
-                        </Box>
-                        <Box display='flex' alignItems='center'>
-                            {currentUser ? (
-                                <UserMenu />
-                            ) : (
-                                <>
-                                    <MenuItemLink to='/login'>Login</MenuItemLink>
-                                    <MenuItemLink to='/register'>Register</MenuItemLink>
-                                </>
-                            )}
-                        </Box>
+
+                        {/* ✅ 仅非首页时显示菜单和用户操作 */}
+                        {showAuth && (
+                            <>
+                                <Box sx={{ display: 'flex' }}>
+                                    <MenuItemLink to='/activities'>Activities</MenuItemLink>
+                                    <MenuItemLink to='/counter'>Counter</MenuItemLink>
+                                    <MenuItemLink to='/errors'>Errors</MenuItemLink>
+                                </Box>
+                                <Box display='flex' alignItems='center'>
+                                    {currentUser ? (
+                                        <UserMenu />
+                                    ) : (
+                                        <>
+                                            <MenuItemLink to='/login'>Login</MenuItemLink>
+                                            <MenuItemLink to='/register'>Register</MenuItemLink>
+                                        </>
+                                    )}
+                                </Box>
+                            </>
+                        )}
                     </Toolbar>
                 </Container>
             </AppBar>
         </Box>
-    )
+    );
 }
