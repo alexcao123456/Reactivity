@@ -28,7 +28,7 @@ export const useActivities = (id?: string) => {
         placeholderData: keepPreviousData,
         initialPageParam: null,
         getNextPageParam: (lastPage) => lastPage.nextCursor,
-        enabled: !id && location.pathname === '/activities' && !!currentUser,
+        enabled: !id && location.pathname.startsWith('/activities'),
         select: data => ({
             ...data,
             pages: data.pages.map((page) => ({
@@ -38,7 +38,9 @@ export const useActivities = (id?: string) => {
                     return {
                         ...activity,
                         isHost: currentUser?.id === activity.hostId,
-                        isGoing: activity.attendees.some(x => x.id === currentUser?.id),
+                        isGoing: currentUser
+                            ? activity.attendees.some(x => x.id === currentUser.id)
+                            : false,
                         hostImageUrl: host?.imageUrl
                     }
                 })
@@ -52,13 +54,15 @@ export const useActivities = (id?: string) => {
             const response = await agent.get<Activity>(`/activities/${id}`);
             return response.data;
         },
-        enabled: !!id && !!currentUser,
+        enabled: !!id,
         select: data => {
             const host = data.attendees.find(x => x.id === data.hostId);
             return {
                 ...data,
                 isHost: currentUser?.id === data.hostId,
-                isGoing: data.attendees.some(x => x.id === currentUser?.id),
+                isGoing: currentUser
+                    ? data.attendees.some(x => x.id === currentUser.id)
+                    : false,
                 hostImageUrl: host?.imageUrl
             }
         }

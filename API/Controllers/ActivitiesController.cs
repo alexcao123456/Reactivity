@@ -12,6 +12,7 @@ namespace API.Controllers;
 
 public class ActivitiesController : BaseApiController
 {
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<PagedList<ActivityDto, DateTime?>>> GetActivities(
             [FromQuery]ActivityParams activityParams)
@@ -19,6 +20,7 @@ public class ActivitiesController : BaseApiController
         return HandleResult(await Mediator.Send(new GetActivityList.Query{Params = activityParams}));
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<ActionResult<ActivityDto>> GetActivityDetail(string id)
     {

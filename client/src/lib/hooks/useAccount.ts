@@ -14,9 +14,7 @@ export const useAccount = () => {
             await agent.post('/login?useCookies=true', creds);
         },
         onSuccess: async () => {
-            await queryClient.invalidateQueries({
-                queryKey: ['user']
-            });
+            await fetchCurrentUser();
         }
     });
 
@@ -42,17 +40,21 @@ export const useAccount = () => {
     });
 
     const {
-        data: currentUser,
-        isLoading: loadingUserInfo,
-        refetch: fetchCurrentUser
-    } = useQuery({
-        queryKey: ['user'],
-        queryFn: async () => {
-            const response = await agent.get<User>('/account/user-info');
-            return response.data;
-        },
-        enabled: false 
-    });
+    data: currentUser,
+    isLoading: loadingUserInfo,
+    refetch: fetchCurrentUser
+  } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const res = await agent.get<User>('/account/user-info');
+      return res.data;
+    },
+    enabled: false,
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false
+  });
 
     return {
         loginUser,

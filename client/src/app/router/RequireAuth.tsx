@@ -8,9 +8,9 @@ export default function RequireAuth() {
 
     useEffect(() => {
         if (!currentUser) {
-            fetchCurrentUser();
+        fetchCurrentUser();   // 只在真正受保护区触发
         }
-    }, []);
+    }, [currentUser, fetchCurrentUser]);
 
     if (loadingUserInfo) return <div>Loading user...</div>;
 
